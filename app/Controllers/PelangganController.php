@@ -2,24 +2,25 @@
 
 namespace App\Controllers;
 
+// Controller untuk menampilkan data pelanggan
 class PelangganController extends BaseController
 {
+    // Fungsi utama yang dijalankan saat mengakses route 'pelanggan'
     public function index()
     {
-        // Data dummy user
+        // Data user statis sebagai dummy (simulasi database)
         $dataUser = [
-            
             [
-                'username' => 'agil',
-                'role' => 'admin'
+                'username' => 'agil',  // Nama pengguna
+                'role'     => 'admin'  // Peran (role) pengguna
             ],
             [
                 'username' => 'rahman',
-                'role' => 'user'
+                'role'     => 'user'
             ],
         ];
 
-        // Kirim data ke view
+        // Mengirim data ke view 'v_pelanggan' dengan nama variabel 'dataUser'
         return view('v_pelanggan', ['dataUser' => $dataUser]);
     }
 }

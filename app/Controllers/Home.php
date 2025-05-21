@@ -2,58 +2,104 @@
 
 namespace App\Controllers;
 
+// Home Controller, biasanya digunakan sebagai halaman utama setelah login
 class Home extends BaseController
 {
+    // Fungsi index() akan dijalankan saat mengakses URL '/'
     public function index(): string
     {
-        return view('v_home');
+        // Data produk dummy
+        $product = [
+            [
+                'nama' => 'Pocong Phone X6pro',
+                'kategori' => 'Smartphone',
+                'harga' => 2999000,
+                'foto' => 'Pocong Phone X6pro.jpg',
+                'stok' => 10
+            ],
+            [
+                'nama' => 'Pocong Phone M6pro',
+                'kategori' => 'Smartphone',
+                'harga' => 3999000,
+                'foto' => 'pocoM6pro.jpg',
+                'stok' => 8
+            ],
+            [
+                'nama' => 'Pocong Phone F7pro',
+                'kategori' => 'Smartphone',
+                'harga' => 4999000,
+                'foto' => 'pocoF7pro.jpg',
+                'stok' => 5
+            ]
+        ];
+
+        // Mengirim data produk ke view 'v_home'
+        return view('v_home', ['product' => $product]);
     }
 
-    public function Hello($nama=null){
+    // Fungsi untuk menampilkan halaman dengan parameter nama
+    public function Hello($nama = null)
+    {
+        // Menyimpan nama dan judul ke dalam array $data
         $data['nama'] = $nama;
         $data['judul'] = 'judul halaman';
 
-        return view('front',$data);
+        // Mengirim data ke view bernama 'front'
+        return view('front', $data);
     }
-    public function riwayatPembelian() {
-      return view('v_riwayatPembelian');
-  }
-  public function stokBarang() {
+
+    // Fungsi untuk menampilkan halaman riwayat pembelian
+    public function riwayatPembelian()
+    {
+        // Menampilkan view 'v_riwayatPembelian'
+        return view('v_riwayatPembelian');
+    }
+
+    // Fungsi untuk menampilkan stok barang yang tersedia
+    public function stokBarang()
+    {
+        // Data dummy daftar barang (bisa diganti dari database nanti)
         $barang = [
             [
-                'nama' => 'Pocong Phone X1',
+                'nama' => 'Pocong Phone X6pro',
                 'kategori' => 'Smartphone',
                 'harga' => 2999000,
                 'stok' => 10
             ],
             [
-                'nama' => 'Pocong Phone S2',
+                'nama' => 'Pocong Phone M6pro',
                 'kategori' => 'Smartphone',
                 'harga' => 3999000,
                 'stok' => 8
             ],
             [
-                'nama' => 'Pocong Phone M3',
+                'nama' => 'Pocong Phone F7pro',
                 'kategori' => 'Smartphone',
                 'harga' => 4999000,
                 'stok' => 5
             ]
         ];
 
+        // Mengirim data barang ke view 'v_stokBarang'
         return view('v_stokBarang', ['barang' => $barang]);
     }
-    public function pelanggan() {
-      $dataUser['dataUser'] = [
-          [
-              'username' => 'agil',
-              'role' => 'admin'
-          ],
-          [
-              'username' => 'rahman',
-              'role' => 'user'
-          ]
-      ];
 
-      return view('v_pelanggan', $dataUser);
-  }
+    // Fungsi ini tampaknya duplikat dari controller pelanggan, sebaiknya pindah ke PelangganController
+    public function pelanggan()
+    {
+        // Data user statis
+        $dataUser['dataUser'] = [
+            [
+                'username' => 'agil',
+                'role' => 'admin'
+            ],
+            [
+                'username' => 'rahman',
+                'role' => 'user'
+            ]
+        ];
+
+        // Menampilkan view 'v_pelanggan' dengan data user
+        return view('v_pelanggan', $dataUser);
+    }
 }
