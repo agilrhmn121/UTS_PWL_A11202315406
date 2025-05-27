@@ -11,11 +11,11 @@ class PelangganController extends BaseController
         // Data user statis sebagai dummy (simulasi database)
         $dataUser = [
             [
-                'username' => 'agil',  // Nama pengguna
+                'username' => 'agilkarbit',  // Nama pengguna
                 'role'     => 'admin'  // Peran (role) pengguna
             ],
             [
-                'username' => 'rahman',
+                'username' => 'rahmankarbit',
                 'role'     => 'user'
             ],
         ];

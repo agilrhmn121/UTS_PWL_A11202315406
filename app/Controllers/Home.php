@@ -14,7 +14,7 @@ class Home extends BaseController
                 'nama' => 'Pocong Phone X6pro',
                 'kategori' => 'Smartphone',
                 'harga' => 2999000,
-                'foto' => 'Pocong Phone X6pro.jpg',
+                'foto' => 'X6pro.jpg',
                 'stok' => 10
             ],
             [
@@ -90,11 +90,11 @@ class Home extends BaseController
         // Data user statis
         $dataUser['dataUser'] = [
             [
-                'username' => 'agil',
+                'username' => 'agilkarbit',
                 'role' => 'admin'
             ],
             [
-                'username' => 'rahman',
+                'username' => 'rahmankarbit',
                 'role' => 'user'
             ]
         ];
