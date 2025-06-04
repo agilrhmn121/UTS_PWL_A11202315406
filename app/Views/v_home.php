@@ -1,24 +1,37 @@
 <?= $this->extend('layout') ?>
 <?= $this->section('content') ?>
-<!-- Toko HP Pocong -->
+<?php
+if (session()->getFlashData('success')) {
+?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?= session()->getFlashData('success') ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php
+}
+?>
+<!-- Table with stripped rows -->
+<div class="row">
+    <?php foreach ($product as $key => $item) : ?>
+        <div class="col-lg-6">
+            <?= form_open('keranjang') ?>
+            <?php
+           echo form_hidden('id', strval($item['id']));
+echo form_hidden('nama', strval($item['nama']));
+echo form_hidden('harga', strval($item['harga']));
+echo form_hidden('foto', strval($item['foto']));
 
-<?php foreach (array_chunk($product, 2) as $rowItems) : ?>
-    <div class="row mb-4 justify-content-center">
-        <?php foreach ($rowItems as $item) : ?>
-            <div class="col-lg-6 <?= count($rowItems) === 1 ? 'mx-auto' : '' ?>">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <img src="<?= base_url('img/' . ($item['foto'] ?? 'default.jpg')) ?>" alt="..." width="100%">
-                        <h5 class="card-title mt-2">
-                            <?= esc($item['nama']) ?><br>
-                            Rp<?= number_format($item['harga'], 0, ',', '.') ?>
-                        </h5>
-                    </div>
+            ?>
+            <div class="card">
+                <div class="card-body">
+                    <img src="<?php echo base_url() . "img/" . $item['foto'] ?>" alt="..." width="300px">
+                    <h5 class="card-title"><?php echo $item['nama'] ?><br><?php echo number_to_currency($item['harga'], 'IDR') ?></h5>
+                    <button type="submit" class="btn btn-info rounded-pill">Beli</button>
                 </div>
             </div>
-        <?php endforeach ?>
-    </div>
-<?php endforeach ?>
-
-<!-- End Toko HP Pocong -->
+            <?= form_close() ?>
+        </div>
+    <?php endforeach ?>
+</div>
+<!-- End Table with stripped rows -->
 <?= $this->endSection() ?>

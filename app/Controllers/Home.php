@@ -2,15 +2,29 @@
 
 namespace App\Controllers;
 
-// Home Controller, biasanya digunakan sebagai halaman utama setelah login
+use App\Models\ProductModel;
+use Config\Services; // Import Services
+
 class Home extends BaseController
 {
-    // Fungsi index() akan dijalankan saat mengakses URL '/'
+    protected $product;
+    protected $cart;
+
+    public function __construct()
+    {
+        helper('form');
+        helper('number');
+        $this->product = new ProductModel();
+
+        // Dapatkan instance Cart
+        $this->cart = Services::cart();
+    }
+
     public function index(): string
     {
-        // Data produk dummy
         $product = [
             [
+                'id' => 1,
                 'nama' => 'Pocong Phone X6pro',
                 'kategori' => 'Smartphone',
                 'harga' => 2999000,
@@ -18,6 +32,7 @@ class Home extends BaseController
                 'stok' => 10
             ],
             [
+                'id' => 2,
                 'nama' => 'Pocong Phone M6pro',
                 'kategori' => 'Smartphone',
                 'harga' => 3999000,
@@ -25,6 +40,7 @@ class Home extends BaseController
                 'stok' => 8
             ],
             [
+                'id' => 3,
                 'nama' => 'Pocong Phone F7pro',
                 'kategori' => 'Smartphone',
                 'harga' => 4999000,
@@ -33,73 +49,71 @@ class Home extends BaseController
             ]
         ];
 
-        // Mengirim data produk ke view 'v_home'
         return view('v_home', ['product' => $product]);
     }
 
-    // Fungsi untuk menampilkan halaman dengan parameter nama
-    public function Hello($nama = null)
+    // Fungsi untuk menambahkan produk ke cart
+    public function addToCart()
     {
-        // Menyimpan nama dan judul ke dalam array $data
-        $data['nama'] = $nama;
-        $data['judul'] = 'judul halaman';
+        $post = $this->request->getPost();
 
-        // Mengirim data ke view bernama 'front'
-        return view('front', $data);
+        // Contoh input minimal: id, qty, price, name
+        $item = [
+            'id' => $post['id'],
+            'qty' => (int)$post['qty'],
+            'price' => (float)$post['price'],
+            'name' => $post['name']
+        ];
+
+        $rowid = $this->cart->insert($item);
+
+        if ($rowid) {
+            return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang.');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menambahkan produk ke keranjang.');
+        }
     }
 
-    // Fungsi untuk menampilkan halaman riwayat pembelian
+    // Fungsi untuk menampilkan isi keranjang
+    public function cart()
+    {
+        $data['cart'] = $this->cart->contents();
+        return view('v_cart', $data);
+    }
+
+    // Fungsi untuk mengupdate jumlah item di keranjang
+    public function updateCart()
+    {
+        $post = $this->request->getPost();
+
+        // $post harus mengandung 'rowid' dan 'qty'
+        $items = [];
+        foreach ($post['rowid'] as $key => $rowid) {
+            $items[] = [
+                'rowid' => $rowid,
+                'qty' => (int)$post['qty'][$key]
+            ];
+        }
+
+        $updated = $this->cart->update($items);
+
+        if ($updated) {
+            return redirect()->back()->with('success', 'Keranjang berhasil diperbarui.');
+        } else {
+            return redirect()->back()->with('error', 'Gagal memperbarui keranjang.');
+        }
+    }
+
+    // Fungsi untuk menghapus item dari keranjang
+    public function removeFromCart($rowid)
+    {
+        $this->cart->remove($rowid);
+        return redirect()->back()->with('success', 'Produk berhasil dihapus dari keranjang.');
+    }
     public function riwayatPembelian()
-    {
-        // Menampilkan view 'v_riwayatPembelian'
-        return view('v_riwayatPembelian');
-    }
+{
+    return view('v_riwayatPembelian');
+}
 
-    // Fungsi untuk menampilkan stok barang yang tersedia
-    public function stokBarang()
-    {
-        // Data dummy daftar barang (bisa diganti dari database nanti)
-        $barang = [
-            [
-                'nama' => 'Pocong Phone X6pro',
-                'kategori' => 'Smartphone',
-                'harga' => 2999000,
-                'stok' => 10
-            ],
-            [
-                'nama' => 'Pocong Phone M6pro',
-                'kategori' => 'Smartphone',
-                'harga' => 3999000,
-                'stok' => 8
-            ],
-            [
-                'nama' => 'Pocong Phone F7pro',
-                'kategori' => 'Smartphone',
-                'harga' => 4999000,
-                'stok' => 5
-            ]
-        ];
-
-        // Mengirim data barang ke view 'v_stokBarang'
-        return view('v_stokBarang', ['barang' => $barang]);
-    }
-
-    // Fungsi ini tampaknya duplikat dari controller pelanggan, sebaiknya pindah ke PelangganController
-    public function pelanggan()
-    {
-        // Data user statis
-        $dataUser['dataUser'] = [
-            [
-                'username' => 'agilkarbit',
-                'role' => 'admin'
-            ],
-            [
-                'username' => 'rahmankarbit',
-                'role' => 'user'
-            ]
-        ];
-
-        // Menampilkan view 'v_pelanggan' dengan data user
-        return view('v_pelanggan', $dataUser);
-    }
+    // Fungsi lain yang sudah ada tetap bisa dipakai...
 }

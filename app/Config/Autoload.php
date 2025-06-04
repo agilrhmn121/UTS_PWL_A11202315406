@@ -41,6 +41,7 @@ class Autoload extends AutoloadConfig
      */
     public $psr4 = [
         APP_NAMESPACE => APPPATH,
+        'JasonN\Cart' => ROOTPATH . 'vendor/jason-napolitano/codeigniter4-cart-module/src',
     ];
 
     /**
